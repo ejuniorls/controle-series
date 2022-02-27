@@ -5,9 +5,10 @@
 @section('conteudo')
     <section class="container pt-3">
         <form method="post">
+            @csrf
             <div class="mb-3">
                 <label for="nome" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="nome" aria-describedby="nome"
+                <input type="text" class="form-control" id="nome" name="nome" aria-describedby="nome"
                        placeholder="Digite o nome da série">
             </div>
 

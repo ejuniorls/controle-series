@@ -24,11 +24,20 @@ class SeriesController extends Controller
 
     public function store(SeriesFormRequest $request)
     {
-        $serie = Serie::create($request->all());
+//        dd([$request->nome, $request->temporadas, $request->episodios]);
+        $serie = Serie::create(['nome' => $request->nome]);
+        $qtd_temporadas = $request->temporadas;
+        for ($i = 1; $i <= $qtd_temporadas; $i++) {
+            $temporada = $serie->temporadas()->create(['numero' => $i]);
+
+            for ($j = 1; $j <= $request->episodios; $j++) {
+                $temporada->episodios()->create(['numero' => $j]);
+            }
+        }
 
         $request
             ->session()
-            ->flash("mensagem", "Série  $serie->nome adicionada com sucesso!");
+            ->flash("mensagem", "Série $serie->nome e suas temporadas e episódios adicionados com sucesso!");
 
         return redirect('/series');
     }
@@ -42,6 +51,6 @@ class SeriesController extends Controller
                 "Série removida com sucesso"
             );
 
-        return redirect( '/series');
+        return redirect('/series');
     }
 }

@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Episodio;
 use App\Http\Requests\SeriesFormRequest;
 use App\Serie;
+use App\Services\CriadorDeSeries;
+use App\Services\RemovedorDeSeries;
+use App\Temporada;
 use Illuminate\Http\Request;
 
 class SeriesController extends Controller
@@ -22,18 +26,9 @@ class SeriesController extends Controller
         return view('series.create');
     }
 
-    public function store(SeriesFormRequest $request)
+    public function store(SeriesFormRequest $request, CriadorDeSeries $criadorDeSerie)
     {
-//        dd([$request->nome, $request->temporadas, $request->episodios]);
-        $serie = Serie::create(['nome' => $request->nome]);
-        $qtd_temporadas = $request->temporadas;
-        for ($i = 1; $i <= $qtd_temporadas; $i++) {
-            $temporada = $serie->temporadas()->create(['numero' => $i]);
-
-            for ($j = 1; $j <= $request->episodios; $j++) {
-                $temporada->episodios()->create(['numero' => $j]);
-            }
-        }
+        $serie = $criadorDeSerie->criarSerie($request->nome, $request->temporadas, $request->episodios);
 
         $request
             ->session()
@@ -42,9 +37,10 @@ class SeriesController extends Controller
         return redirect('/series');
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request, RemovedorDeSeries $removedorDeSeries)
     {
-        Serie::destroy($request->id);
+        $serie = $removedorDeSeries->removerSerie($request->id);
+
         $request->session()
             ->flash(
                 'mensagem',

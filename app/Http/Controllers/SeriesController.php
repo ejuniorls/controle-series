@@ -49,4 +49,12 @@ class SeriesController extends Controller
 
         return redirect('/series');
     }
+
+    public function put(int $id, Request $request)
+    {
+        $nome = $request->nome;
+        $serie = Serie::find($id);
+        $serie->nome = $nome;
+        $serie->save();
+    }
 }

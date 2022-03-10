@@ -11,13 +11,12 @@ class RemovedorDeSeries
 {
     public function removerSerie(int $serie): string
     {
-        $nomeSerie = '';
-        DB::transaction(function () use ($serie, &$nomeSerie) {
-            $serie = Serie::find($serie);
-            $nomeSerie = $serie->nome;
-            $this->removerTemporadas($serie);
-            $serie->delete();
-        });
+        DB::beginTransaction();
+        $serie = Serie::find($serie);
+        $nomeSerie = $serie->nome;
+        $this->removerTemporadas($serie);
+        $serie->delete();
+        DB::commit();
 
         return $nomeSerie;
     }

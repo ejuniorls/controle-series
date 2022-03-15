@@ -8,11 +8,7 @@
     <section class="container pt-">
         <a href="{{ route('series.create') }}" class="btn btn-sm btn-dark my-3">Adicionar</a>
 
-        @if (!empty($mensagem))
-            <div class="alert alert-success" role="alert">
-                {{ $mensagem }}
-            </div>
-        @endif
+        @includeWhen(!empty($mensagem), 'alert',  ['mensagem' => $mensagem])
 
         <ul class="list-group">
             @foreach($series as $serie)

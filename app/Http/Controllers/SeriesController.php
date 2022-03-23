@@ -9,6 +9,7 @@ use App\Services\CriadorDeSeries;
 use App\Services\RemovedorDeSeries;
 use App\Temporada;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SeriesController extends Controller
 {

@@ -6,11 +6,13 @@
 
 @section('conteudo')
     <section class="container pt-">
-        <a href="{{ route('series.create') }}" class="btn btn-sm btn-dark my-3">Adicionar</a>
+        @auth
+            <a href="{{ route('series.create') }}" class="btn btn-sm btn-dark mt-3">Adicionar</a>
+        @endauth
 
         @includeWhen(!empty($mensagem), 'alert',  ['mensagem' => $mensagem])
 
-        <ul class="list-group">
+        <ul class="list-group mt-3">
             @foreach($series as $serie)
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span id="nome-serie-{{ $serie->id }}">{{ $serie->nome }}</span>
@@ -26,21 +28,27 @@
                     </div>
 
                     <div class="d-flex">
-                        <button class="btn btn-secondary btn-sm me-2" onclick="toggleInput({{ $serie->id }})">
-                            <i class="bi bi-pencil"></i>
-                        </button>
+                        @auth
+                            <button class="btn btn-secondary btn-sm me-2" onclick="toggleInput({{ $serie->id }})">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        @endauth
 
-                        <a href="{{ route('temporadas.index', $serie->id ) }}" class="btn btn-secondary btn-sm me-2">
+                        <a href="{{ route('temporadas.index', $serie->id ) }}"
+                           class="btn btn-secondary btn-sm me-2">
                             <i class="bi bi-box-arrow-up-right"></i>
                         </a>
 
-                        <form method="post" action="/series/{{ $serie->id}}" onsubmit="return confirm('Tem certeza?')">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger btn-sm">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </form>
+                        @auth
+                            <form method="post" action="/series/{{ $serie->id}}"
+                                  onsubmit="return confirm('Tem certeza?')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        @endauth
                     </div>
                 </li>
 

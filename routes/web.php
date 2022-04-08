@@ -11,6 +11,9 @@
 |
 */
 
+use App\Mail\NovaSerie;
+use Illuminate\Support\Facades\Mail;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -51,3 +54,18 @@ Route::get('/sair', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/visualizando-email', function () {
+    return new NovaSerie('Rupauls Drag Race', 14, 22);
+});
+
+Route::get('/enviando-email', function () {
+    $email = new NovaSerie('Rupauls Drag Race', 14, 22);
+    $email->subject = 'Nova série adicionada';
+    $user = (object)[
+        'email' => 'ejuniorls@outlook.com',
+        'name' => "Júnior"
+    ];
+    Mail::to($user)->send($email);
+    return 'E-mail enviado';
+});

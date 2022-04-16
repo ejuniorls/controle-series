@@ -35,11 +35,12 @@ class SeriesController extends Controller
         $serie = $criadorDeSerie->criarSerie($request->nome, $request->temporadas, $request->episodios);
 
         $users = User::all();
-        foreach ($users as $user) {
+        foreach ($users as $index => $user) {
+            $x = $index + 1;
             $email = new NovaSerie($request->nome, $request->temporadas, $request->episodios);
             $email->subject = 'Nova série adicionada';
-            Mail::to($user)->send($email);
-            sleep(5);
+            $when = now()->addSecond($x * 5);
+            Mail::to($user)->later($when, $email);
         }
 
         $request

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Episodio;
+use App\Events\NovaSerieEvent;
 use App\Http\Requests\SeriesFormRequest;
 use App\Mail\NovaSerie;
 use App\Serie;
@@ -34,14 +35,8 @@ class SeriesController extends Controller
     {
         $serie = $criadorDeSerie->criarSerie($request->nome, $request->temporadas, $request->episodios);
 
-        $users = User::all();
-        foreach ($users as $index => $user) {
-            $x = $index + 1;
-            $email = new NovaSerie($request->nome, $request->temporadas, $request->episodios);
-            $email->subject = 'Nova série adicionada';
-            $when = now()->addSecond($x * 5);
-            Mail::to($user)->later($when, $email);
-        }
+        $eventoNovaSerie = new NovaSerieEvent($request->nome, $request->temporadas, $request->episodios);
+        event($eventoNovaSerie);
 
         $request
             ->session()

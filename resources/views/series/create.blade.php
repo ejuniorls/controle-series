@@ -14,7 +14,7 @@
             </div>
         @endif
 
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="col col-8 mb-3">
@@ -36,7 +36,15 @@
                 </div>
 
             </div>
-            <button type="submit" class="btn-sm btn-dark">Enviar</button>
+
+            <div class="row">
+                <div class="col col-12">
+                    <label for="capa">Capa</label>
+                    <input type="file" class="form-control" name="capa" id="capa">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-sm btn-dark mt-3">Enviar</button>
         </form>
     </section>
 @endsection

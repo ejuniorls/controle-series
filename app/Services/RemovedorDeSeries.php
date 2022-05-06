@@ -6,6 +6,7 @@ use App\Episodio;
 use App\Serie;
 use App\Temporada;
 use Illuminate\Support\Facades\DB;
+use Storage;
 
 class RemovedorDeSeries
 {
@@ -14,8 +15,13 @@ class RemovedorDeSeries
         DB::beginTransaction();
         $serie = Serie::find($serie);
         $nomeSerie = $serie->nome;
+
         $this->removerTemporadas($serie);
         $serie->delete();
+
+        if ($serie->capa) {
+            Storage::delete($serie->capa);
+        }
         DB::commit();
 
         return $nomeSerie;
